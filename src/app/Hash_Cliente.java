@@ -1,12 +1,12 @@
 package app;
 
-public class Hash {
+public class Hash_Cliente {
     
 
     private int N = 20071;
     private Lista [] tabela;
 
-        public Hash( )
+        public Hash_Cliente( )
         {
             tabela = new Lista[N];
         }
@@ -58,11 +58,11 @@ public class Hash {
         //pesquisar na tabela
         public IDado pesquisar(String cpf)
         {
-            String chave = (cpf.toString());
+            String chave_ = (cpf.toString());
 
-            if (chave != null)
+            if (chave_ != null)
             {
-                int i = hash(chave);
+                int i = hash(chave_);
                 return (tabela[i].localizar(cpf));
             }
             return null;

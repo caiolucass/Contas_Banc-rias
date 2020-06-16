@@ -1,17 +1,15 @@
 package app;
 
-import java.util.Date;
-
 class Cliente implements IDado {
 
 	private String nome;
 	public String cpf;
-	Lista listaOperacoes = new Lista(); //lista de operacoes do cliente
+	Lista listaOperacoes = new Lista(); // lista de operacoes do cliente
 
 	public Cliente(String cpf, String nome) throws IllegalArgumentException {
 
-		this.nome = nome;
 		this.cpf = cpf;
+		this.nome = nome;
 	}
 
 	@Override
@@ -53,43 +51,39 @@ class Cliente implements IDado {
 
 	@Override
 	public String toString() {
-		return ("Nome do cliente: " + this.nome + "- CPF: " + this.cpf);
+		return ("CPF do Cliente: " + this.cpf + " Nome: " + this.nome);
 	}
 
 	/*
-     *criar uma nova Operacao, com o Cliente atual, 
-     *a Conta onde ele foi operacionado, e a data;
-	*/
-	public void addNasOperacoes(Conta conta, Date data)
-	{
-		Operacoes operacao = new Operacoes(this, conta, data);
-		Elemento novo = new Elemento(operacao);
+	 * criar uma nova Operacao, com o Cliente atual, a Conta onde ele foi
+	 * operacionado, e a data;
+	 */
+	public void addNasOperacoes(Conta conta) {
+		Elemento novo = new Elemento(conta);
 		listaOperacoes.Inserir(novo);
-		conta.addNasOperacoes(operacao);
 	}
-   
-	/* 
-	*Função que gera o relatorio toda vez que,
-	*um cliente operaciona, mostrando o valor do
-	*saldo de cada conta e o saldo_final
-    */
-	public String Relatorio_saldo(){
+
+	/*
+	 * Função que gera o relatorio toda vez que, um cliente operaciona, mostrando o
+	 * valor do saldo de cada conta e o saldo_final
+	 */
+	public String Relatorio_saldo() {
 
 		Elemento aux = listaOperacoes.prim.prox;
-		Operacoes operacao;
+
+		Conta conta;
 		double saldo = 0.0;
 		double saldo_final = 0.0;
 		String relatorio = "";
 
-		while (aux != null)
-		{
-			operacao = (Operacoes)aux.meuDado;
-			saldo += operacao.getValor();
-			relatorio += operacao.toString()+ "\n\n";
+		while (aux != null) {
+			conta = (Conta) aux.meuDado;
+			saldo += conta.getSaldo_inicial();
+			relatorio += conta.toString() + "\n\n";
 			aux = aux.prox;
 		}
 		saldo_final = saldo;
-		relatorio += "Saldo final: "+ saldo_final + "\n";
+		relatorio += "Saldo final: " + saldo_final + "\n";
 		return relatorio;
 	}
 

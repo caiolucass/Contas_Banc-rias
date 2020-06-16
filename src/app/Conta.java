@@ -2,7 +2,6 @@ package app;
 
 import java.util.Date;
 
-
 public class Conta implements IDado {
 
     private int numero;
@@ -37,14 +36,6 @@ public class Conta implements IDado {
         return cpf;
     }
 
-    public void setID(String cpf) {
-        if (cpf.length() < 11 || !cpf.contains(".") || !cpf.contains("-")) {
-            throw new IllegalArgumentException("CPF inválido.");
-        } else {
-            this.cpf = cpf;
-        }
-    }
-
     public Lista getListaOperacoes() {
         return listaOperacoes;
     }
@@ -66,53 +57,54 @@ public class Conta implements IDado {
 
     @Override
     public String toString() {
-        return ("Numero do cliente: "+ this.numero + "\tCPF: " + this.cpf + "\tSaldo inicial: R$ " + this.saldo_inicial);
+        return ("Número da Conta: " + this.numero + " \tCPF: " + this.cpf + "\tSaldo inicial: R$ "
+                + this.saldo_inicial);
     }
 
-    public void addNasOperacoes(Operacoes operacoes) {
+    public void addNasOperacoes(Operacoes operacoes, Conta conta) {
+
+        Cliente cliente = (Cliente) app.arvoreCliente.pesquisar(conta.getID());
         Elemento novo = new Elemento(operacoes);
         listaOperacoes.Inserir(novo);
+        cliente.addNasOperacoes(conta);
     }
 
     /*
-     *gerar um extrato, dos clientes que acessaram a conta e suas operacoes
+     * gerar um extrato, dos clientes que acessaram a conta e suas operacoes
      */
-    public String Extrato()
-    {
+    public String Extrato_Conta() {
         Elemento aux = listaOperacoes.prim.prox;
         Operacoes operacao;
         String extrato = "";
 
-        while(aux != null)
-        {
-            operacao = (Operacoes)aux.meuDado;
-            extrato += operacao.toString() +"\n\n";
+        while (aux != null) {
+            operacao = (Operacoes) aux.meuDado;
+            extrato += operacao.toString() + "\n\n";
             aux = aux.prox;
         }
         return extrato;
     }
 
     /*
-     * gerar um extrato, dos clientes que acessaram a conta 
-     * e suas operaçoes no periodo de datas escolhido pelo cliente
-    */
-    public String ExtratoData(Date data)
-    {
+     * gerar um extrato, dos clientes que acessaram a conta e suas operaçoes no
+     * periodo de datas escolhido pelo cliente
+     */
+    public String Extrato_Conta_Data(Date dia) {
         Elemento aux = listaOperacoes.prim.prox;
         Operacoes operacao;
+
         String extrato = "";
 
-        while (aux != null)
-        {
-            operacao = (Operacoes)aux.meuDado;
+        while (aux != null) {
+            operacao = (Operacoes) aux.meuDado;
 
-            if(data.compareTo(operacao.data) >= 0) {
+            if (dia.compareTo(operacao.data) >= 0) {
 
                 extrato += operacao.toString() + "\n\n";
-                aux = aux.prox;
             }
+            aux = aux.prox;
         }
-            return extrato;
+        return extrato;
     }
 
 }

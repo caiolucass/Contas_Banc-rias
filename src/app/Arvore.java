@@ -1,190 +1,155 @@
 package app;
 
 public class Arvore {
-    
+
     private Nodo raiz;
 
-        public Arvore()
-        {
-            raiz = null;
-        }
+    public Arvore() {
+        raiz = null;
+    }
 
-        //verificar se a arvore esta vazia
-        public Boolean vazia()
-        {
-            return (this.raiz == null);
-        }
+    // verificar se a arvore esta vazia
+    public Boolean vazia() {
+        return (this.raiz == null);
+    }
 
-        //adicionar nodo
-        private Nodo adicionar(Nodo no, IDado novo)
-        {
-            if (no == null){
-                no = new Nodo(novo);
+    // Inserir Dado no nodo
+    public void inserir(IDado novo) {
+        this.raiz = adicionar(this.raiz, novo);
+    }
+
+    // Adcionar Nodo na árvore
+    private Nodo adicionar(Nodo no, IDado novo) {
+        if (no == null) {
+            no = new Nodo(novo);
+        } else if (no.meuDado.getID().toString().compareTo(novo.getID().toString()) < 0) {
+            no.esq = adicionar(no.esq, novo);
+        } else if (no.meuDado.getID().toString().compareTo(novo.getID().toString()) > 0) {
+            no.dir = adicionar(no.dir, novo);
+        } else {
+            System.out.println("Dado com informação de " + novo + " já foi inserido anteriormente.");
+        }
+        return no;
+    }
+
+    // Remover Dado
+    public void remover(String cpf) {
+        this.raiz = removerArvore(this.raiz, cpf);
+    }
+
+    // Remover Nodo da árvore
+    private Nodo removerArvore(Nodo no, String cpf) {
+        if (no == null) {
+            return null;
+        } else {
+            if (no.meuDado.getID().equals(cpf)) {
+                if (no.dir == null) {
+
+                    return no.esq;
+                } else if (no.esq == null) {
+
+                    return no.dir;
+                } else {
+                    no.esq = antecessor(no, no.esq);
+                    return no;
+                }
+            } else if (no.meuDado.getID().toString().compareTo(cpf.toString()) > 0) {
+
+                no.esq = removerArvore(no.esq, cpf);
+            } else {
+
+                no.dir = removerArvore(no.dir, cpf);
             }
-            else if(no.meuDado.getID().compareTo(novo.getID()) > 0){
-                no.esq = adicionar(no.esq, novo);
-            }
-            else if (no.meuDado.getID().compareTo(novo.getID()) < 0){
-                no.dir = adicionar(no.dir, novo);
-            }
-            else{
-                System.out.printf("O dado chamado {1} já foi inserido anteriormente.", novo);
-            }        
             return no;
         }
+    }
 
-        //inserir
-        public void inserir(IDado d)
-        {
-            this.raiz = adicionar(this.raiz, d);
+    // Verificar Nodo antecessor
+    private Nodo antecessor(Nodo retirado, Nodo no) {
+        if (no.dir != null) {
+            no.dir = antecessor(retirado, no.dir);
+            return no;
+        } else {
+            retirado = no;
+            return no.esq;
         }
+    }
 
-        //vereficar antecessor
-        private Nodo antecessor(Nodo retirado, Nodo no)
-        {
-            if (no.dir != null)
-            {
-                no.dir = antecessor(retirado, no.dir);
-                return no;
-            }
-            else
-            {
-                retirado = no;
-                return no.esq;
-            }
-        }
+    // Pesquisar Nodo na árvore
+    private IDado pesquisar(Nodo no, String cpf) {
+        if (no == null)
+            return null;
+        else {
+            if (no.meuDado.getID().equals(cpf)) {
+                return no.meuDado;
+            } else if (no.meuDado.getID().toString().compareTo(cpf.toString()) > 0) {
 
-        //remover um nodo da arvore
-        private Nodo remover(Nodo no, String cpf)
-        {
-            if (no == null)
-            {
-                return no;
-            }
-            else
-            {
-                if (no.meuDado.getID().equals(cpf))
-                {
-                    if (no.dir == null){
-
-                        return no.esq;
-                    }  
-                    else if(no.esq == null){
-
-                        return no.dir;
-                    }
-                    else
-                    {
-                        no.esq = antecessor(no, no.esq);
-                        return no;
-                    }
-                }//end if found
-                else if (no.meuDado.getID().compareTo(cpf) > 0){
-
-                    no.esq = remover(no.esq, cpf);
-                }
-                else{
-
-                    no.dir = remover(no.dir, cpf);
-                }
-                return no;
+                return pesquisar(no.dir, cpf);
+            } else {
+                return pesquisar(no.esq, cpf);
             }
         }
+    }
 
-        //remover
-        public void remover(String cpf)
-        {
-            this.raiz = remover(this.raiz, cpf);
+    // Pesquisar Dado no Nodo
+    public IDado pesquisar(String cpf) {
+        return pesquisar(this.raiz, cpf);
+    }
+
+    // imprimir decrescente
+    private void imprimirArvoreCrescente(Nodo no) {
+        if (no != null) {
+            imprimirArvoreCrescente(no.esq);
+            System.out.println(no.meuDado.getID());
+            imprimirArvoreCrescente(no.dir);
         }
+    }
 
-        //pesquisar nodo
-        private IDado pesquisar(Nodo no, Object cpf)
-        {
-            if (no == null)
-                return null;
-            else
-            {
-                if (no.meuDado.getID().equals(cpf)){
-                    return no.meuDado;
-                }
-                else if(no.meuDado.getID().toString().compareTo(cpf.toString()) > 0){
+    public void imprimirCrescente() {
+        imprimirArvoreCrescente(this.raiz);
+    }
 
-                    return pesquisar(no.esq, cpf);
-                }
-                else{
-                    return pesquisar(no.dir, cpf);
-                } 
-            }
+    // imprimir crescente
+    private void imprimirArvoreDecrescente(Nodo no) {
+        if (no != null) {
+            imprimirArvoreDecrescente(no.dir);
+            System.out.println(no.meuDado.getID());
+            imprimirArvoreDecrescente(no.esq);
         }
+    }
 
-        //pesquisar dado do nodo
-        public IDado pesquisar(Object cpf)
-        {
-            return pesquisar(this.raiz,cpf);
-        }
+    public void imprimirDecrescente() {
+        imprimirArvoreDecrescente(this.raiz);
+    }
 
-        //imprimir decrescente
-        private void imprimirCrescente(Nodo no)
-        {
-            if (no != null)
-            {
-                imprimirCrescente(no.esq);
-                System.out.println(no.meuDado.getID());
-                imprimirCrescente(no.dir);
-            }
-        }
+    // contador
+    private int contar(Nodo no) {
+        if (no != null)
+            return 1 + contar(no.esq) + contar(no.dir);
 
-        public void imprimirCrescente()
-        {
-            imprimirCrescente(this.raiz);
-        }
+        return 0;
+    }
 
-        //imprimir crescente
-        private void imprimirDecrescente(Nodo no)
-        {
-            if (no != null)
-            {
-                imprimirDecrescente(no.dir);
-                System.out.println(no.meuDado.getID());
-                imprimirDecrescente(no.esq);
-            }
-        }
+    // quantidade nodos
+    public int contaNodos() {
+        return contar(this.raiz);
+    }
 
-        public void imprimirDecrescente()
-        {
-            imprimirDecrescente(this.raiz);
-        }
+    public int max(int a, int b) {
+        return ((a > b) ? a : b);
+    }
 
-        //contador
-        private int contar(Nodo no)
-        {
-            if (no != null) return 1 + contar(no.esq) + contar(no.dir);
-
+    // contar altura
+    private int alturaArvore(Nodo no) {
+        if (no == null)
             return 0;
-        }
+        else
+            return 1 + max(alturaArvore(no.esq), alturaArvore(no.dir));
 
-        //quantidade nodos
-        public int contaNodos()
-        {
-            return contar(this.raiz);
-        }
+    }
 
-        public int max(int a, int b)
-        {
-            return ((a > b) ? a : b);
-        }
-
-        //contar altura
-        private int altura(Nodo no)
-        {
-            if (no == null) return 0;
-            else return 1 + max(altura(no.esq), altura(no.dir));
-
-        }
-
-        //altura da arvore
-        public int altura()
-        {
-            return altura(this.raiz);
-        }
+    // altura da arvore
+    public int altura() {
+        return alturaArvore(this.raiz);
+    }
 }

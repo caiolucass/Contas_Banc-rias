@@ -1,4 +1,4 @@
-# Contas_Banc-rias
+# Contas_Bancárias
 
 # Algoritmo para simular desempenho de uma Conta Bancária
 Feio em Java usando Algoritmos como árvore binária, pesquisa binária,Lista encadeada e Hash. 

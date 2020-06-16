@@ -1,6 +1,6 @@
 # Contas_Bancárias
 
-# Algoritmo para simular desempenho de uma Conta Bancária
+# Sistema para simular o desempenho de uma Conta Bancária
 Feito em Java usando Algoritmos como árvore binária, pesquisa binária,Lista encadeada e Hash. 
 
 # Sobre
